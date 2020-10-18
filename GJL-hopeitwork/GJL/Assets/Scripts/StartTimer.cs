@@ -6,7 +6,7 @@ public class StartTimer : MonoBehaviour
 
     [SerializeField] private TMP_Text timerText;
 
-    private float timerReset = 120f;
+    private float timerReset = 3f;
     
     public static float timerUsed = 120f;
 
@@ -25,20 +25,10 @@ public class StartTimer : MonoBehaviour
 
     private void TimerMethod()
     {
-        if (Time.timeScale > 0 && timerUsed > 0)
+        if (timerUsed > 0)
         {
             timerUsed -= Time.deltaTime;
             timerText.text = timerUsed.ToString("F2");
         }
-        else
-        {
-            timerText.text = "ope";
-            GameOver();
-        }
-    }
-
-    private void GameOver()
-    {
-        Time.timeScale = 0;
     }
 }

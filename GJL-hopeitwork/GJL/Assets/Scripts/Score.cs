@@ -11,7 +11,7 @@ public class Score : MonoBehaviour
     [SerializeField] private TMP_Text xBoard;
     [SerializeField] private TMP_Text candyPerLevelText;
     [SerializeField] private TMP_Text candyCollectPerLevel;
-    public int currentScore = 0;
+    public static int currentScore = 0;
     public int numberOfCandiesCollectedDuringCombo = 0;
     public bool comboEnded = true;
     public int scoreMultiplier = 1;
@@ -90,11 +90,6 @@ public class Score : MonoBehaviour
     private void ScoreMethod()
     {
         currentScore += 100 * scoreMultiplier;
-
-        if (GameMasterScript.currentLevel == 1)
-        {
-            GameMasterScript.level1Score = currentScore;
-        }
     }
 
     private void CandyCollectionTextShow()

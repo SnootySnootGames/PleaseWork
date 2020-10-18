@@ -9,10 +9,14 @@ public class GameMasterScript : MonoBehaviour
     [SerializeField] private GameObject boy;
     [SerializeField] private GameObject girl;
 
+    public static bool pause = false;
     public static int currentLevel = 1;
     public static int level1Score;
     public static bool characterSelection = true; //true = girl, false = boy
     public static string previousScene;
+    public static bool level1completed = false;
+    public static bool level2completed = false;
+    public static bool level3completed = false;
 
     private bool globalLightChange = true;
 
@@ -35,6 +39,7 @@ public class GameMasterScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             paused = !paused;
+            Application.Quit();
         }
     }
 
