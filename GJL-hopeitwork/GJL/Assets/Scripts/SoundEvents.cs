@@ -3,21 +3,23 @@ using UnityEngine;
 
 public class SoundEvents : MonoBehaviour
 {
-    
+    [SerializeField] AudioSource cameraAudioSource;
+    [SerializeField] private AudioClip gameplaySong1;
+    [SerializeField] private AudioClip gameplaySong2;
+    [SerializeField] private AudioClip gameplaySong3;
+    [SerializeField] private AudioClip gameplaySong4;
+    [SerializeField] private AudioClip MainMenuSong;
+    [SerializeField] private AudioClip CreditsSong;
     private FMOD.Studio.EventInstance instance;
-    private FMOD.Studio.EventInstance levelMusicInstance;
-    private FMOD.Studio.EventInstance ambienceMusicInstance;
     private bool levelMusicCanPlay = true;
-    private float lengthOfLevelMusic;
     private string nameOfSceneToCheckAgainstCurrentSceneName;
-    
+    private AudioClip whichClipToPlay;
 
     private void Update()
     {
         DashSoundMethod();
         LevelMusicUpdate();
         CheckIfSceneChanged();
-        Debug.Log(LevelSelect.gameOver);
     }
 
     private void DashSoundMethod()
@@ -49,44 +51,50 @@ public class SoundEvents : MonoBehaviour
         {
             if (LevelSelect.currentSceneName == "Menu")
             {
-                levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Menu_Music");
-                lengthOfLevelMusic = 48f;
-                levelMusicInstance.start();
+                whichClipToPlay = MainMenuSong;
+                //levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Menu_Music");
+                //lengthOfLevelMusic = 48f;
+                //levelMusicInstance.start();
             }
             else if (LevelSelect.currentSceneName == "Credits")
             {
-                levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Credits_Music");
-                lengthOfLevelMusic = 29f;
-                levelMusicInstance.start();
+                whichClipToPlay = CreditsSong;
+                //levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Credits_Music");
+                //lengthOfLevelMusic = 29f;
+                //levelMusicInstance.start();
             }
             else if (LevelSelect.currentSceneName == "Level1")
             {
-                levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_1");
-                lengthOfLevelMusic = 29f;
-                levelMusicInstance.start();
+                whichClipToPlay = gameplaySong1;
+                //levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_1");
+                //lengthOfLevelMusic = 29f;
+                //levelMusicInstance.start();
             }
             else if (LevelSelect.currentSceneName == "Level2")
             {
-                levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_3");
-                lengthOfLevelMusic = 29f;
-                levelMusicInstance.start();
+                whichClipToPlay = gameplaySong2;
+                //levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_3");
+                //lengthOfLevelMusic = 29f;
+                //levelMusicInstance.start();
             }
             else if (LevelSelect.currentSceneName == "Level3")
             {
-                levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_4");
-                lengthOfLevelMusic = 30f;
-                levelMusicInstance.start();
+                whichClipToPlay = gameplaySong3;
+                //levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_4");
+                //lengthOfLevelMusic = 30f;
+                //levelMusicInstance.start();
             }
             else
-            {
-                RepeatMethodForLevelMusic();
+            { 
+            
             }
         }
         else
         {
-            levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_2");
-            lengthOfLevelMusic = 30f;
-            levelMusicInstance.start();
+            whichClipToPlay = gameplaySong4;
+            //levelMusicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Gameplay_Music_2");
+            //lengthOfLevelMusic = 30f;
+            //levelMusicInstance.start();
         }
     }
 
@@ -101,8 +109,7 @@ public class SoundEvents : MonoBehaviour
 
     public void RepeatMethodForLevelMusic()
     {
-        levelMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        levelMusicInstance.release();
+        cameraAudioSource.Stop();
     }
 
     private IEnumerator LevelMusicCheck()
@@ -110,7 +117,8 @@ public class SoundEvents : MonoBehaviour
         levelMusicCanPlay = false;
         nameOfSceneToCheckAgainstCurrentSceneName = LevelSelect.currentSceneName;
         LevelMusicSelection();
-        yield return new WaitForSeconds(lengthOfLevelMusic);
+        cameraAudioSource.PlayOneShot(whichClipToPlay);
+        yield return new WaitForSeconds(whichClipToPlay.length);
         levelMusicCanPlay = true;
     }
 }

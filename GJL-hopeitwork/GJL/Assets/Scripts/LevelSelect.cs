@@ -20,7 +20,8 @@ public class LevelSelect : MonoBehaviour
     void Start()
     {
         instanceButtonClick = FMODUnity.RuntimeManager.CreateInstance("event:/Candy_Steal");
-        GetActiveSceneName();        
+        GetActiveSceneName();
+        characterSelectScreen.SetActive(false);
     }
 
     private void Update()
@@ -30,7 +31,12 @@ public class LevelSelect : MonoBehaviour
         if (story == null)
         {
             story = GameObject.FindGameObjectWithTag("story");
-            story.SetActive(false);
+            if (story != null)
+            {
+                Transform tmp = story.transform.GetChild(0);
+                tmp.gameObject.SetActive(true);
+                story.SetActive(false);
+            }
         }
     }
 
@@ -88,30 +94,23 @@ public class LevelSelect : MonoBehaviour
         GameMasterScript.previousScene = currentSceneName;
         currentSceneName = "Level1";
         SceneManager.LoadScene(currentSceneName);
-        gameOver = false;
     }
 
     public void Story2ToLevel2()
     {
-        GameMasterScript.pause = false;
         instanceButtonClick.start();
         GameMasterScript.previousScene = currentSceneName;
         currentSceneName = "Level2";
         SceneManager.LoadScene(currentSceneName);
     }
 
-    public void MethodForQuit()
-    {
-        Application.Quit();
-    }
-
     private void CandyAmountPerLevel()
     {
-        if (currentSceneName == "Level2")
+        if (currentSceneName == "Level1")
         {
             Score.candyAmountPerLevel = 6;
         }
-        else if (currentSceneName == "Level1")
+        else if (currentSceneName == "Level2")
         {
             Score.candyAmountPerLevel = 15;
         }
@@ -123,12 +122,18 @@ public class LevelSelect : MonoBehaviour
 
     private void LevelWinState()
     {
-                if (Score.totalCandyCollected == Score.candyAmountPerLevel)
+        if (Score.totalCandyCollected == Score.candyAmountPerLevel)
+        {
+            if (currentSceneName == "Level1")
+            {
+                GameMasterScript.level1Score = Score.currentScore;
+                Score.currentScore = 0;
+                Score.totalCandyCollected = 0;
+                if (story != null)
                 {
-                    GameMasterScript.level1Score = Score.currentScore;
-                    Score.currentScore = 0;
-                    Score.totalCandyCollected = 0;
                     story.SetActive(true);
                 }
+            }
+        }
     }
 }

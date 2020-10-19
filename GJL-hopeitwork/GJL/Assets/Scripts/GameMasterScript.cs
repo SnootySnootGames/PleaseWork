@@ -19,9 +19,14 @@ public class GameMasterScript : MonoBehaviour
     public static bool level3completed = false;
 
     private bool globalLightChange = true;
+    private GameObject pauseMenu;
 
     private void Update()
     {
+        if (pauseMenu == null)
+        {
+            pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu");
+        }
         PauseGameInput();
         PauseGameFunction();
         if (boy != null & girl != null)
@@ -39,19 +44,28 @@ public class GameMasterScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             paused = !paused;
-            Application.Quit();
         }
+    }
+
+    public void CancleQuitMenu()
+    {
+        paused = !paused;
+    }
+
+    public void MethodForQuit()
+    {
+        Application.Quit();
     }
 
     private void PauseGameFunction()
     {
         if (paused == true)
         {
-            Time.timeScale = 0f;
+            pauseMenu.SetActive(true);
         }
         else
         {
-            Time.timeScale = 1f;
+            pauseMenu.SetActive(false);
         }
     }
 
